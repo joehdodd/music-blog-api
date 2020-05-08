@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
   return res.status(200).json({ message: 'Ok!', data: posts });
 });
 
-router.get('/:postId', JWTAuth, async (req, res) => {
+router.get('/:postId', async (req, res) => {
   const post = await req.context.models.Post.findOne({
     where: { id: parseInt(req.params.postId) },
   });

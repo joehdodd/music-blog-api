@@ -5,7 +5,7 @@ import comment from './comment';
 
 export default app => {
   app.use('/session', session);
-  app.use('/users', user);
+  app.use('/user', user);
   app.use('/post', post);
   app.use('/comments', comment)
 };
