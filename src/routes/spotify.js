@@ -1,8 +1,13 @@
 import { Router } from 'express';
-import axios from 'axios';
+import SpotifyController from '../controllers/spotifyController';
 import JWTAuth from '../middleware/JWTAuth';
 
 const router = Router();
+const spotify = new SpotifyController();
+
+console.log('spotify', spotify);
+
+spotify.authorize('/token', { response_type: 'code' });
 
 router.get('/authorize', JWTAuth, async (req, res) => {
   const spotifyAuthorize = 'https://accounts.spotify.com/authorize';
