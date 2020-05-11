@@ -7,6 +7,12 @@ export default (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING
     },
+    accessToken: {
+      type: DataTypes.STRING
+    },
+    refreshToken: {
+      type: DataTypes.STRING
+    },
     firstName: {
       type: DataTypes.STRING
     },
