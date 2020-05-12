@@ -1,9 +1,9 @@
 {
-  "name": "Music-API",
+  "name": "Music-Blog-API",
   "version": "1.0.0",
   "description": "Node API for Music Blog app.",
   "main": "index.js",
-  "repository": "https://github.com/joehdodd/music-api.git",
+  "repository": "https://github.com/joehdodd/music-blog-api.git",
   "author": "Joe Dodd",
   "license": "MIT",
   "private": false,
