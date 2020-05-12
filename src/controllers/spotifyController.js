@@ -14,6 +14,25 @@ export default class SpotifyController {
       const data = await axios.request({
         baseURL: this.spotifyAccountsURL,
         url: endpoint,
+        headers: {
+          Authorization: this.authHeader,
+        },
+        ...config,
+      });
+      return data;
+    } catch (e) {
+      return e;
+    }
+  }
+
+  async get(endpoint, token, config) {
+    try {
+      const data = await axios.request({
+        baseURL: this.spotifyAPIURL,
+        url: endpoint,
+        headers: {
+          Authorization: token,
+        },
         ...config,
       });
       return data;

@@ -1,13 +1,10 @@
 import { Router } from 'express';
+import qs from 'qs';
 import SpotifyController from '../controllers/spotifyController';
 import JWTAuth from '../middleware/JWTAuth';
 
 const router = Router();
 const spotify = new SpotifyController();
-
-console.log('spotify', spotify);
-
-spotify.authorize('/token', { response_type: 'code' });
 
 router.get('/authorize', JWTAuth, async (req, res) => {
   const spotifyAuthorize = 'https://accounts.spotify.com/authorize';
@@ -26,18 +23,16 @@ router.get('/token/:code', JWTAuth, async (req, res) => {
     context: { models },
     user,
   } = req;
-  // console.log(code, models.User, user);
-  const spotifyToken = 'https://accounts.spotify.com/api/token';
-  const spotifyAuthHeader = process.env.SPOTIFY_AUTH_HEADER;
-  const spotifyGrant = 'authorization_code';
-  // const token = await axios.post(spotifyToken, {
-  //   headers: {
-  //     Authorization: spotifyAuthHeader
-  //   }
-  // });
-  const access_token = 'AFLKJJ392039jfasdl23509832509832';
-  const refresh_token = 'AAFFFFFLKSDJF3920958209asdflkj392104982';
-  const expires_in = 604800000;
+  const {
+    data: { access_token, refresh_token, expires_in },
+  } = await spotify.authorize('/api/token', {
+    method: 'POST',
+    data: qs.stringify({
+      code,
+      grant_type: 'authorization_code',
+      redirect_uri: 'http://localhost:3000/authorize',
+    }),
+  });
   const date = new Date();
   const expires = date.getTime() + expires_in;
   models.User.update(
@@ -60,6 +55,10 @@ router.get('/token/:code', JWTAuth, async (req, res) => {
         e,
       });
     });
+
+    // router.get('/search', JWTAuth, async (req, res) => {
+
+    // })
 });
 
 export default router;
