@@ -13,6 +13,9 @@ export default (sequelize, DataTypes) => {
     refreshToken: {
       type: DataTypes.STRING
     },
+    accessExpires: {
+      type: DataTypes.DATE
+    },
     firstName: {
       type: DataTypes.STRING
     },

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import qs from 'qs';
 import SpotifyController from '../controllers/spotifyController';
 import JWTAuth from '../middleware/JWTAuth';
+import { spotifySession } from '../middleware';
 
 const router = Router();
 const spotify = new SpotifyController();
@@ -34,11 +35,13 @@ router.get('/token/:code', JWTAuth, async (req, res) => {
     }),
   });
   const date = new Date();
-  const expires = date.getTime() + expires_in;
+  const expires = date.getTime() + expires_in * 1000;
+  const expirationDate = new Date(expires);
   models.User.update(
     {
       accessToken: access_token,
       refreshToken: refresh_token,
+      accessExpires: expirationDate,
     },
     { returning: false, where: { id: user.dataValues.id } }
   )
@@ -55,10 +58,26 @@ router.get('/token/:code', JWTAuth, async (req, res) => {
         e,
       });
     });
+});
 
-    // router.get('/search', JWTAuth, async (req, res) => {
-
-    // })
+router.get('/search', [JWTAuth, spotifySession], async (req, res) => {
+  try {
+    const {
+      user: { accessToken },
+      query: { query },
+    } = req;
+    const { data } = await spotify.get('/search', accessToken, {
+      params: {
+        q: query,
+        type: 'track',
+        market: 'US',
+        limit: 20,
+      },
+    });
+    res.status(200).json({ message: 'Ok!', data });
+  } catch (e) {
+    res.status(400).json({ message: 'Error!', e });
+  }
 });
 
 export default router;

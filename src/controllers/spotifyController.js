@@ -31,7 +31,7 @@ export default class SpotifyController {
         baseURL: this.spotifyAPIURL,
         url: endpoint,
         headers: {
-          Authorization: token,
+          Authorization: `Bearer ${token}`,
         },
         ...config,
       });

@@ -8,10 +8,11 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "babel src -d dist",
-    "start": "npm run build && nodemon dist/index.js",
-    "serve": "npm run build && node dist/index.js",
-    "test": "npm run build && mocha --require @babel/register"
+    "build": "babel -d dist src",
+    "watch": "nodemon --watch src --exec yarn start",
+    "start": "yarn build && yarn serve",
+    "serve": "node dist/index",
+    "test": "yarn run build && mocha --require @babel/register"
   },
   "dependencies": {
     "axios": "^0.19.2",
@@ -34,6 +35,7 @@
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
-    "eslint": "^5.16.0"
+    "eslint": "^5.16.0",
+    "nodemon": "^2.0.3"
   }
 }

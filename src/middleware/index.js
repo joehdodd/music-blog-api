@@ -1,2 +1,3 @@
 import { context } from './context';
-export { context }
+import { spotifySession } from './spotifySession';
+export { context, spotifySession };
