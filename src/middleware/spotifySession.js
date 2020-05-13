@@ -8,17 +8,16 @@ const spotifySession = async (req, res, next) => {
     user: { dataValues },
     context: { models },
   } = req;
-  const { refreshToken, accessExpires } = dataValues;
+  const { refreshToken, accessExpires, id } = dataValues;
   const date = new Date();
   if (accessExpires.getTime() <= date.getTime()) {
-    console.log(accessExpires, 'expired token');
     const {
-      data: { access_token, refresh_token, expires_in },
+      data: { access_token, expires_in },
     } = await spotify.authorize('/api/token', {
       method: 'POST',
       data: qs.stringify({
-        refreshToken,
-        grant_type: 'authorization_code',
+        refresh_token: refreshToken,
+        grant_type: 'refresh_token',
         redirect_uri: 'http://localhost:3000/authorize',
       }),
     });
@@ -27,18 +26,19 @@ const spotifySession = async (req, res, next) => {
     models.User.update(
       {
         accessToken: access_token,
-        refreshToken: refresh_token,
         accessExpires: expirationDate,
       },
-      { returning: true, where: { id: user.dataValues.id } }
+      { returning: false, where: { id: id } }
     )
-      .then(function ([rowsUpdated, [updatedUser]]) {
+      .then(() => {
+        res.locals.accessToken = access_token;
         next();
       })
       .catch((e) => {
         res.status(400).json({ message: 'Error!', e });
       });
   } else {
+    res.locals.accessToken = dataValues.accessToken;
     next();
   }
 };

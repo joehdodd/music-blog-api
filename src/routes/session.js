@@ -23,7 +23,9 @@ router.post('/', async function (req, res, next) {
       res.cookie('JWTAuth', token, {
         maxAge: age,
       });
-      return res.status(200).send({ session: expires });
+      return res
+        .status(200)
+        .send({ session: expires, spotifySession: user.accessGranted });
     } else {
       return res
         .status(401)

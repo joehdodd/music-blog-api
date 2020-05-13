@@ -42,13 +42,14 @@ router.get('/token/:code', JWTAuth, async (req, res) => {
       accessToken: access_token,
       refreshToken: refresh_token,
       accessExpires: expirationDate,
+      accessGranted: true,
     },
     { returning: false, where: { id: user.dataValues.id } }
   )
     .then(() => {
       res.status(200).json({
         message: 'Ok!',
-        spotifySession: expires,
+        spotifySession: true,
       });
     })
     .catch((e) => {
@@ -63,9 +64,11 @@ router.get('/token/:code', JWTAuth, async (req, res) => {
 router.get('/search', [JWTAuth, spotifySession], async (req, res) => {
   try {
     const {
-      user: { accessToken },
       query: { query },
     } = req;
+    const {
+      locals: { accessToken },
+    } = res;
     const { data } = await spotify.get('/search', accessToken, {
       params: {
         q: query,
@@ -74,7 +77,7 @@ router.get('/search', [JWTAuth, spotifySession], async (req, res) => {
         limit: 20,
       },
     });
-    res.status(200).json({ message: 'Ok!', data });
+    res.status(200).json({ message: 'Ok!', results: data });
   } catch (e) {
     res.status(400).json({ message: 'Error!', e });
   }

@@ -16,6 +16,9 @@ export default (sequelize, DataTypes) => {
     accessExpires: {
       type: DataTypes.DATE
     },
+    accessGranted: {
+      type: DataTypes.BOOLEAN
+    },
     firstName: {
       type: DataTypes.STRING
     },
