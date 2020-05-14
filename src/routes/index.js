@@ -8,6 +8,6 @@ export default app => {
   app.use('/session', session);
   app.use('/user', user);
   app.use('/post', post);
-  app.use('/comments', comment);
+  // app.use('/comments', comment);
   app.use('/spotify', spotify);
 };

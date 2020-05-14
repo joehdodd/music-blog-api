@@ -1,56 +1,58 @@
+import { Op } from 'sequelize';
+
 export default (sequelize, DataTypes) => {
   const User = sequelize.define('user', {
     username: {
       type: DataTypes.STRING,
-      unique: true
+      unique: true,
     },
     password: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     accessToken: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     refreshToken: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     accessExpires: {
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
     },
     accessGranted: {
-      type: DataTypes.BOOLEAN
+      type: DataTypes.BOOLEAN,
     },
     firstName: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     lastName: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     email: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
   });
 
-  User.associate = models => {
+  User.associate = (models) => {
     User.hasMany(models.Post);
     User.hasMany(models.PostComment);
   };
 
-  User.findByLogin = async login => {
+  User.findByLogin = async (login) => {
     let user = await User.findOne({
-      where: { username: login }
+      where: { username: { [Op.eq]: login } },
     });
 
     if (!user) {
       user = await User.findOne({
-        where: { email: login }
+        where: { email: { [Op.eq]: login } },
       });
     }
     return user;
   };
 
-  User.findById = async id => {
+  User.findById = async (id) => {
     let user = await User.findOne({
-      where: { id }
+      where: { id: { [Op.eq]: id } },
     });
 
     return user;

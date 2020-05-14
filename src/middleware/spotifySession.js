@@ -1,7 +1,9 @@
 import qs from 'qs';
+import Sequelize from 'sequelize';
 import SpotifyController from '../controllers/spotifyController';
 
 const spotify = new SpotifyController();
+const Op = Sequelize.Op;
 
 const spotifySession = async (req, res, next) => {
   const {
@@ -28,7 +30,7 @@ const spotifySession = async (req, res, next) => {
         accessToken: access_token,
         accessExpires: expirationDate,
       },
-      { returning: false, where: { id: id } }
+      { returning: false, where: { id: { [Op.eq]: id } } }
     )
       .then(() => {
         res.locals.accessToken = access_token;

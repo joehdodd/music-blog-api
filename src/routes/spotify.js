@@ -1,10 +1,12 @@
 import { Router } from 'express';
+import Sequelize from 'sequelize';
 import qs from 'qs';
 import SpotifyController from '../controllers/spotifyController';
 import JWTAuth from '../middleware/JWTAuth';
 import { spotifySession } from '../middleware';
 
 const router = Router();
+const Op = Sequelize.Op;
 const spotify = new SpotifyController();
 
 router.get('/authorize', JWTAuth, async (req, res) => {
@@ -44,7 +46,7 @@ router.get('/token/:code', JWTAuth, async (req, res) => {
       accessExpires: expirationDate,
       accessGranted: true,
     },
-    { returning: false, where: { id: user.dataValues.id } }
+    { returning: false, where: { id: { [Op.eq]: user.dataValues.id } } }
   )
     .then(() => {
       res.status(200).json({
