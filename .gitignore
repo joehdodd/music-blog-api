@@ -9,3 +9,4 @@ dist
 
 # other
 npm-debug.log
+.DS_store
