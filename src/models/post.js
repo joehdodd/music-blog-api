@@ -5,7 +5,8 @@ const post = (sequelize, DataTypes) => {
     title: { type: DataTypes.TEXT },
     body: { type: DataTypes.TEXT },
     name: { type: DataTypes.TEXT },
-    spotifyId: { type: DataTypes.TEXT },
+    externalId: { type: DataTypes.TEXT },
+    type: { type: DataTypes.TEXT },
   });
 
   Post.associate = (models) => {

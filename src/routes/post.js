@@ -21,13 +21,14 @@ router.get('/:postId', async (req, res) => {
 
 router.post('/', JWTAuth, async (req, res) => {
   try {
-    const { postTitle, postBody, name, spotifyId } = req.body;
+    const { postTitle, postBody, name, externalId, type } = req.body;
     const post = await req.context.models.Post.create(
       {
         title: postTitle,
         body: postBody,
         name: name,
-        spotifyId,
+        externalId,
+        type,
         userId: req.user.dataValues.id,
       },
       { returning: true }
